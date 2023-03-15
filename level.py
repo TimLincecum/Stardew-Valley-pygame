@@ -50,7 +50,15 @@ class Level :
         for obj in tmx_data.get_layer_by_name('Decoration') :
             WilldFlower((obj.x,obj.y),obj.image,[self.all_sprites,self.collision_sprites])
 
-        self.player = Player((640,360),self.all_sprites,self.collision_sprites)    #播放器再这个通用类之前运行，人物将在地板下 开始设置
+        # collion tiles
+        for x,y,surface in tmx_data.get_layer_by_name('Collision').tiles() :
+            Generic((x * TILE_SIZE,y * TILE_SIZE), pygame.Surface((TILE_SIZE,TILE_SIZE)) , self.collision_sprites) # pos (x,y),surf,最后的参数self.collision_sprites改为👉更直观的看出边界[self.all_sprites,self.collision_sprites]
+
+
+        # Player
+        for obj in tmx_data.get_layer_by_name('Player') : # tmx文件中的初始位置，调用，使玩家位置不再卡在栏杆外
+            if obj.name == 'Start' :
+                self.player = Player((obj.x,obj.y),self.all_sprites,self.collision_sprites)    #播放器再这个通用类之前运行，人物将在地板下 开始设置
         Generic(
             pos = (0,0),
             surf = pygame.image.load('../graphics/world/ground.png').convert_alpha(),

@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite) :
         self.speed = 200
 
         # collision
-        self.hitbox = self.rect.copy().inflate((-126,-70))
+        self.hitbox = self.rect.copy().inflate((-126,-70)) # 创建自己的hitbox命中框
         self.collision_sprites = collision_sprites
 
         # timers
@@ -161,13 +161,22 @@ class Player(pygame.sprite.Sprite) :
         for sprite in self.collision_sprites.sprites() :
             if hasattr(sprite,'hitbox') : # hasattr() 函数用于判断对象是否包含对应的属性
                 if sprite.hitbox.colliderect(self.hitbox) :
-                    if direction == 'horizontal' :
+                    if direction == 'horizontal' : # 左右碰撞
                         if self.direction.x > 0 : # moving right
-                            self.hitbox.right = self.hitbox.left
+                            self.hitbox.right = sprite.hitbox.left
                         if self.direction.x < 0 : # moving left
-                            self.hitbox.left = self.hitbox.right
+                            self.hitbox.left = sprite.hitbox.right
                         self.rect.centerx = self.hitbox.centerx
                         self.pos.x = self.hitbox.centerx
+            
+                    if  direction == 'vertical' : # 上下碰撞
+                        if self.direction.y > 0 : # moving up
+                            self.hitbox.bottom = sprite.hitbox.top
+                        if self.direction.y < 0 : # moving down
+                            self.hitbox.top = sprite.hitbox.bottom
+                        self.rect.centery = self.hitbox.centery
+                        self.pos.y = self.hitbox.centery
+                        # 下方的collision不能忘记写
 
 
     def move(self,dt) :
@@ -187,6 +196,7 @@ class Player(pygame.sprite.Sprite) :
         self.pos.y += self.direction.y * self.speed * dt
         self.hitbox.centery = round(self.pos.y)
         self.rect.centery = self.hitbox.centery
+        self.collision('vertical')
         
     def update(self,dt) : # 每一帧调用一次，检测输入
         self.input()
