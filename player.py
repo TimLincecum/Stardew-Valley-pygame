@@ -4,7 +4,7 @@ from support import *
 from timer import Timer
 
 class Player(pygame.sprite.Sprite) :
-    def __init__(self,pos,group,collision_sprites) :
+    def __init__(self,pos,group,collision_sprites,tree_sprites) :
         super().__init__(group)
 
         self.import_assets()
@@ -49,9 +49,31 @@ class Player(pygame.sprite.Sprite) :
         self.seed_index = 0
         self.selected_seed = self.seeds[self.seed_index]
 
+        # interaction
+        self.tree_sprites = tree_sprites
+
+
     def use_tool(self) :
-        pass
+        # pass
         # print(self.selected_tool)
+
+        print('tool use')
+
+        if self.selected_tool == 'hoe' :
+            pass
+
+        if self.selected_tool == 'axe' :
+            for tree in self.tree_sprites.sprites() :
+                if tree.rect.collidepoint(self.target_pos) :
+                    tree.damge()
+
+        if self.selected_tool == 'water' :
+            pass
+
+    def get_target_pos(self) :
+
+        self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]
+        # 举个栗子,现在是一个播放器，玩家在正中间，我们希望使用工具，假如玩家向左看，那么我希望玩家的工具使用是在左边一个身位并向下一点点的位置,也就是玩家的斜下方      更新它  别忘了!!!!!
 
     def use_seed(self) :
         pass
@@ -202,5 +224,8 @@ class Player(pygame.sprite.Sprite) :
         self.input()
         self.get_status()
         self.update_timers()
+        self.get_target_pos()
+
+
         self.move(dt) # 和帧速度率无关
         self.animate(dt)

@@ -11,7 +11,7 @@ OVERLAY_POSITIONS = {
 }
 
 # ?
-PLAYER_TOOL_OFFSET = {
+PLAYER_TOOL_OFFSET = { # 工具的偏移量
     'left' : Vector2(-50,40),
     'right' : Vector2(50,40),
     'up' : Vector2(0,-10),
@@ -28,7 +28,7 @@ LAYERS = {  # 层
     'ground plant' : 6,
     'main' : 7,
     'house top' : 8,
-    'fruit' : 9,
+    'fruit' : 9, # 水果
     'rain drops' : 10
 }
 

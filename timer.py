@@ -18,6 +18,7 @@ class Timer :
     def update(self) :
         current_time = pygame.time.get_ticks()
         if current_time - self.start_time >= self.duration :
-            self.deactivate()
-            if self.func :
+            # self.deactivate() 如果在这里，每次运行后都会归零，下面的判断不会生效
+            if self.func and self.start_time != 0 :
                 self.func()
+            self.deactivate()   # 开始判断
