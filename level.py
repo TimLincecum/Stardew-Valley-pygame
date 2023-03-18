@@ -72,7 +72,6 @@ class Level :
             z = LAYERS['ground']
             )
         
-
     def run(self,dt) :
         # print("开始摆烂")
         self.display_surface.fill('red') #
