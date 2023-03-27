@@ -49,9 +49,16 @@ class Player(pygame.sprite.Sprite) :
         self.seed_index = 0
         self.selected_seed = self.seeds[self.seed_index]
 
+        # inventory 存货清单,玩家库存
+        self.item_inventory = {
+            'wood' : 0,
+            'apple' : 0,
+            'corn' : 0,
+            'tomato' : 0
+        }
+
         # interaction
         self.tree_sprites = tree_sprites
-
 
     def use_tool(self) :
         # pass
@@ -160,8 +167,7 @@ class Player(pygame.sprite.Sprite) :
                 self.seed_index = self.seed_index if self.seed_index < len(self.seeds) else 0
                 self.selected_seed = self.seeds[self.seed_index]
                 # print(self.selected_seed)
-
-              
+          
     def get_status(self) :
         # 如果玩家并未移动
         if self.direction.magnitude() == 0 :
@@ -199,7 +205,6 @@ class Player(pygame.sprite.Sprite) :
                         self.rect.centery = self.hitbox.centery
                         self.pos.y = self.hitbox.centery
                         # 下方的collision不能忘记写
-
 
     def move(self,dt) :
         # horizontal movement 归一化向量 

@@ -14,7 +14,7 @@ class Level :
 
         # sprite groups ?精灵组
         # self.all_sprites = pygame.sprite.Group()
-        self.all_sprites = GameraGroup()
+        self.all_sprites = CameraGroup()
         self.collision_sprites = pygame.sprite.Group()
         self.tree_sprites = pygame.sprite.Group()
 
@@ -45,7 +45,13 @@ class Level :
 
         # trees
         for obj in tmx_data.get_layer_by_name('Trees') :
-            Tree((obj.x,obj.y),obj.image,[self.all_sprites,self.collision_sprites,self.tree_sprites],obj.name)
+            Tree(
+                pos = (obj.x,obj.y),
+                surf = obj.image,
+                groups = [self.all_sprites,self.collision_sprites,self.tree_sprites],
+                name = obj.name,
+                player_add = self.player_add
+                )  # ??? 确保这里不要调用，只想在内部调用
 
         # wildflowers
         for obj in tmx_data.get_layer_by_name('Decoration') :
@@ -71,7 +77,11 @@ class Level :
             groups = self.all_sprites,
             z = LAYERS['ground']
             )
-        
+
+    def player_add(self,item) :
+
+        self.player.item_inventory[item] += 1
+
     def run(self,dt) :
         # print("开始摆烂")
         self.display_surface.fill('red') #
@@ -80,8 +90,9 @@ class Level :
         self.all_sprites.update(dt)
 
         self.overlay.display()  ##注意缩进，缩进玩不明白写棒槌py
+        print(self.player.item_inventory)
 
-class GameraGroup(pygame.sprite.Group) :
+class CameraGroup(pygame.sprite.Group) :
     def __init__(self) :
         super().__init__()
         self.display_surface = pygame.display.get_surface()

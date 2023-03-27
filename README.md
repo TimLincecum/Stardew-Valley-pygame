@@ -55,3 +55,11 @@ def check_death(self) :
 
 ## 3.25 P13
 苹果树消失的粒子特效,整体可写的不多,只要把参数全部搞明白写上就行，这里不过多赘述，马上上课了
+
+## 3.27 P14
+玩家库存
+建立字典进行物品的存储 `self.item_inventory` ,需要链接player和sprites中的Tree类,必须在level中完成链接,
+在level中添加player_add类,获取 `self.player.item_inventory[item]` 数值是+= 1,会更加方便些,这意味着在setup中需要
+更新创建tree,添加的 `player_add = self.player_add` 并且确保只在内部调用,在sprites中的tree类中的__init__添加
+player_add参数，并在内部调用,当树被破坏时，将会 `self.player_add('apple')` 这将完成苹果存储的操作，树的操作同理
+在 `def check_death(self)` 中调用 `self.player_add('wood')` ,在树木收集完成。
