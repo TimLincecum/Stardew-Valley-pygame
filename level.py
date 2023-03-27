@@ -2,9 +2,10 @@ import pygame
 from settings import *
 from player import Player
 from overlay import Overlay
-from sprites import Generic,Water,WilldFlower,Tree
+from sprites import Generic,Water,WilldFlower,Tree,Interaction
 from pytmx.util_pygame import load_pygame
 from support import *
+from transition import Transition
 
 class Level :
     def __init__(self) :
@@ -17,9 +18,11 @@ class Level :
         self.all_sprites = CameraGroup()
         self.collision_sprites = pygame.sprite.Group()
         self.tree_sprites = pygame.sprite.Group()
+        self.interaction_sprites = pygame.sprite.Group()
 
         self.setup()
         self.overlay = Overlay(self.player)
+        self.transition = Transition(self.reset,self.player)
 
     def setup(self) :
 
@@ -69,8 +72,17 @@ class Level :
                     pos = (obj.x,obj.y),
                     group = self.all_sprites,
                     collision_sprites = self.collision_sprites,
-                    tree_sprites = self.tree_sprites
-                    )    #播放器再这个通用类之前运行，人物将在地板下 开始设置
+                    tree_sprites = self.tree_sprites, # 播放器再这个通用类之前运行，人物将在地板下 开始设置
+                    interaction = self.interaction_sprites
+                    )    
+                
+            if obj.name == 'Bed' :
+                Interaction(pos = (obj.x,obj.y),
+                            size = (obj.width,obj.height),
+                            groups = self.interaction_sprites,
+                            name = 'Bed' # obj.name
+                            )
+            
         Generic(
             pos = (0,0),
             surf = pygame.image.load('../graphics/world/ground.png').convert_alpha(),
@@ -82,6 +94,14 @@ class Level :
 
         self.player.item_inventory[item] += 1
 
+    def reset(self) : # 需要一个过渡
+
+        # apples on the trees
+        for tree in self.tree_sprites.sprites() :
+            for apple in tree.apple_sprites.sprites() :
+                apple.kill()
+            tree.create_fruit()
+
     def run(self,dt) :
         # print("开始摆烂")
         self.display_surface.fill('red') #
@@ -90,7 +110,10 @@ class Level :
         self.all_sprites.update(dt)
 
         self.overlay.display()  ##注意缩进，缩进玩不明白写棒槌py
-        print(self.player.item_inventory)
+        # print(self.player.item_inventory)
+
+        if self.player.sleep :
+            self.transition.play()
 
 class CameraGroup(pygame.sprite.Group) :
     def __init__(self) :

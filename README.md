@@ -63,3 +63,29 @@ def check_death(self) :
 更新创建tree,添加的 `player_add = self.player_add` 并且确保只在内部调用,在sprites中的tree类中的__init__添加
 player_add参数，并在内部调用,当树被破坏时，将会 `self.player_add('apple')` 这将完成苹果存储的操作，树的操作同理
 在 `def check_death(self)` 中调用 `self.player_add('wood')` ,在树木收集完成。
+
+## 3.28 p15
+新的一天开始  
+使用用tiled中player图层中的Bed选项,将这一块区域设置为“睡觉”的判定区域，当玩家控制sprites移动到该区域并且按回车时，判定
+玩家将执行睡觉并进入新的一天的操作,在sprites中创建一个新的类为instruction,类的属性继承Generic,初始化对象的属性中有pos, size, groups, name
+这里不需要surface，因为无论如何，这种sprites永不可见, `surf = pygame.Surface(size)` ,现在要继承多个父类方法所以调用
+super方法 `super().__init__(pos, surf, groups)` ，现在在level中的播放器设置，判断玩家是否是在'Bed'区域中，导入sprites中的Interaction并且赋参数,  
+`
+if obj.name == 'Bed' :  
+    Interaction(pos = (obj.x,obj.y),  
+                size = (obj.width,obj.height),  
+                groups = self.interaction_sprites,  
+                name = 'Bed' # obj.name  
+                )
+`
+name用'Bed'或者obj.name都可以，现在将 `interaction = self.interaction_sprites` 加入循环中的判定，并在player的内部
+加入参数interaction，现在就检查玩家是否在判定的区域内并按下了回车，现在判断输入回车时，玩家是否Bed sprite相重叠
+`collided_interaction_sprites = pygame.sprite.spritecollide(self,self.interaction,False)` 
+三个值分别是sprite, group, dokill，确定玩家的状态后，开始重启关卡的工作，重启关卡意味着所有树会得到新的苹果，如果还活着的树
+需要重置整个level，tree调用完成的函数create_fruit，再使用for循环进行消除现有的苹果的操作，这基本上是一个重置，现在需要
+玩家重置和画面过渡一起运行，现在player中定义sleep的状态为False，如果玩家按下回车，设置为True，玩家是否进行sleep操作的判断
+就这样，现在开始过渡，创建过渡用的类transition，定义常用的setup设置，创建覆盖层，设置宽度和高度，即窗口的大小获取，color为255
+设置图像填充，导入到level中，现在图像会从全白快速到黑色，这是正确的，每一帧的颜色都是变得越来越暗，加入参数 `special_flags = pygame.BLEND_RGBA_MULT`
+会使变化更好的过渡，但因为self.color运算后会为负数，所以会导致程序崩溃，需要加上判断speed要乘以负一，color超过二五五要重新赋值
+现在还有三件事，重置方法，唤醒层，设置速度为-2在结束过渡时，
+在睡觉时移动是奇怪的，需要加上睡觉时移动要赋值为False

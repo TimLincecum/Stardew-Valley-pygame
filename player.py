@@ -4,7 +4,7 @@ from support import *
 from timer import Timer
 
 class Player(pygame.sprite.Sprite) :
-    def __init__(self,pos,group,collision_sprites,tree_sprites) :
+    def __init__(self,pos,group,collision_sprites,tree_sprites,interaction) :
         super().__init__(group)
 
         self.import_assets()
@@ -59,6 +59,8 @@ class Player(pygame.sprite.Sprite) :
 
         # interaction
         self.tree_sprites = tree_sprites
+        self.interaction = interaction
+        self.sleep = False
 
     def use_tool(self) :
         # pass
@@ -72,7 +74,7 @@ class Player(pygame.sprite.Sprite) :
         if self.selected_tool == 'axe' :
             for tree in self.tree_sprites.sprites() :
                 if tree.rect.collidepoint(self.target_pos) :
-                    tree.damge()
+                    tree.damage()
 
         if self.selected_tool == 'water' :
             pass
@@ -107,7 +109,7 @@ class Player(pygame.sprite.Sprite) :
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if not self.timers['tool use'].active : # 玩家不移动时，允许走动并使用工具
+        if not self.timers['tool use'].active and not self.sleep: # 玩家不移动时，允许走动并使用工具
             # 方向 directions
             if keys[pygame.K_UP] :
                 # print('up')
@@ -167,6 +169,15 @@ class Player(pygame.sprite.Sprite) :
                 self.seed_index = self.seed_index if self.seed_index < len(self.seeds) else 0
                 self.selected_seed = self.seeds[self.seed_index]
                 # print(self.selected_seed)
+
+            if keys[pygame.K_RETURN] :
+                collided_interaction_sprites = pygame.sprite.spritecollide(self,self.interaction,False) # sprite, group, dokill
+                if collided_interaction_sprites :
+                    if collided_interaction_sprites[0].name == 'Trader' : # name是在sprites中定义的
+                        pass
+                    else :
+                        self.status = 'left_idle'
+                        self.sleep = True
           
     def get_status(self) :
         # 如果玩家并未移动
