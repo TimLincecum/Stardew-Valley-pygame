@@ -89,3 +89,9 @@ name用'Bed'或者obj.name都可以，现在将 `interaction = self.interaction_
 会使变化更好的过渡，但因为self.color运算后会为负数，所以会导致程序崩溃，需要加上判断speed要乘以负一，color超过二五五要重新赋值
 现在还有三件事，重置方法，唤醒层，设置速度为-2在结束过渡时，
 在睡觉时移动是奇怪的，需要加上睡觉时移动要赋值为False
+
+## 3.29 p16
+在map.tmx中的Farmable是可耕种位置,求出地图的高和宽共有多少块瓷砖，tiled中的地图属性也有，创建列表使每一块瓷砖都在其中
+标记好可耕种的瓷砖地块后，创建新方法create_hit_rects和新的列表，对存储的地块循环，先行后列，再进行枚举,如果地块再列表中的位置是有'F'表示的，那么输出这个地块的列表位置，x的位置是列表位置乘以瓷砖大小，y的位置同理，最后将所有的值赋给空的列表
+中，
+会通过SoilLayer前往player发生再level内部的setup中的Player中soil_layer,再player中加上属性soil_layer,最后在interaction中把参数变为实际属性

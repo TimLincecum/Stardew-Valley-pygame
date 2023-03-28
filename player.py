@@ -4,7 +4,7 @@ from support import *
 from timer import Timer
 
 class Player(pygame.sprite.Sprite) :
-    def __init__(self,pos,group,collision_sprites,tree_sprites,interaction) :
+    def __init__(self,pos,group,collision_sprites,tree_sprites,interaction,soil_layer) :
         super().__init__(group)
 
         self.import_assets()
@@ -61,15 +61,16 @@ class Player(pygame.sprite.Sprite) :
         self.tree_sprites = tree_sprites
         self.interaction = interaction
         self.sleep = False
+        self.soil_layer = soil_layer
 
     def use_tool(self) :
         # pass
         # print(self.selected_tool)
 
-        print('tool use')
+        # print('tool use') 加入soil_layer后，不必打印语句了，pass改为soil_layer，直接调用，这样就可以使用或定位它，方法是get_hit
 
         if self.selected_tool == 'hoe' :
-            pass
+            self.soil_layer.get_hit(self.target_pos)
 
         if self.selected_tool == 'axe' :
             for tree in self.tree_sprites.sprites() :
