@@ -91,7 +91,12 @@ name用'Bed'或者obj.name都可以，现在将 `interaction = self.interaction_
 在睡觉时移动是奇怪的，需要加上睡觉时移动要赋值为False
 
 ## 3.29 p16
-在map.tmx中的Farmable是可耕种位置,求出地图的高和宽共有多少块瓷砖，tiled中的地图属性也有，创建列表使每一块瓷砖都在其中
-标记好可耕种的瓷砖地块后，创建新方法create_hit_rects和新的列表，对存储的地块循环，先行后列，再进行枚举,如果地块再列表中的位置是有'F'表示的，那么输出这个地块的列表位置，x的位置是列表位置乘以瓷砖大小，y的位置同理，最后将所有的值赋给空的列表
-中，
-会通过SoilLayer前往player发生再level内部的setup中的Player中soil_layer,再player中加上属性soil_layer,最后在interaction中把参数变为实际属性
+耕种的土壤
+导入sprites方便管理，pygame.image.load导入土壤的图soil_surf，这里有三个问题需要注意，首先判断该地区是否适合耕种，其次地区是否超过边界，最后判断土壤里是否有其他植物，所以要求出全部的可耕种那个瓷砖地格，在map.tmx中的Farmable是可耕种位置,求出地图的高和宽共有多少块瓷砖，tiled中的地图属性也有，创建列表使每一块瓷砖都在其中，标记好可耕种的瓷砖地块后，创建新方法create_hit_rects和新的列表，对存储的地块循环，先行后列，再进行枚举,进行判断如果地块再列表中的位置是有'F'表示的，那么输出这个地块的列表位置，x的位置是列表位置乘以瓷砖大小，y的位置同理，最后将所有的值赋给空的列表中，申请新的函数get_hit，创建工具的碰撞点进行判断，获取x和y，x = rect.x // TILE_SIZE和y = rect.y // TILE_SIZE以此来获取平铺的位置，检查列表中是否有'F',先获取列，再到行中进行判断，如果含有'F'，则再列表中append('X')，这个方法会通过SoilLayer前往player发生再level内部的setup中的Player中soil_layer,再player中加上属性soil_layer,最后在interaction中把参数变为实际属性，现状使用工具时，调用soil_layer.get_hit(self.target_pos),现在前面赋值x的地方创建一个土壤瓦片SoilTile，这样就完成了耕地的创建
+
+## 3.29 P18 p17未作
+浇水的逻辑
+与耕种的土壤逻辑相似，首先再use_tool中将soil_layer写入水壶的判断中，给予参数self.target_pos，再sioil中创建新的方法
+water用来获取浇水的位置，有两件事要做在这里，首先是将列表中的耕地表加上'w'进行标记，其次是定义一个WaterTile的类表示这块耕地上有水，再类中有三件事要做，首先是复制土壤耕地的位置意味着水瓦的位置应该和耕地的位置相同，其次是导入图像的路径，最后
+重新开始的一天，水会消失，消失的水砖定义为remove_water，检视Self.grid中的'W'并且删除，最后再level中的reset中调用方法
+完成水砖的消除
