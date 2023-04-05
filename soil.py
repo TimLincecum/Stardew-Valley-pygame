@@ -72,6 +72,8 @@ class SoilLayer :
                     # print('farmable')
                     self.grid[y][x].append('X') # 告诉我们在这块瓷砖上我们有一块土壤
                     self.create_soil_tiles()
+                    if self.raining :
+                        self.water_all()
     
     def water(self,target_pos) :
         for soil_sprites in self.soil_sprites.sprites() :
@@ -92,6 +94,15 @@ class SoilLayer :
                 # 3.random select one surface
                 # 4.create one  more group 'water_sprites'
 
+    def water_all(self) :
+        for index_row,row in enumerate(self.grid) :
+            for index_col,cell in enumerate(row) :
+                if 'X' in cell and 'W' not in cell : # 检查是否有瓦片，并且未浇水(没有'W')
+                    cell.append('W')
+                    x = index_col * TILE_SIZE
+                    y = index_row * TILE_SIZE
+                    WaterTile((x,y), self.water_surf, groups = [self.all_sprites,self.soil_sprites])
+
     def remove_water(self) : # 水的消失
         
         # destory all water sprites
@@ -103,6 +114,7 @@ class SoilLayer :
             for cell in row :
                 if 'W' in cell:
                     cell.remove('W')
+        
 
     def create_soil_tiles(self) :
         self.soil_sprites.empty() # 在前面赋值x的地方创建一个土壤瓦片
