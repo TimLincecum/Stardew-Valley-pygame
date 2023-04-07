@@ -85,9 +85,10 @@ class Player(pygame.sprite.Sprite) :
         self.target_pos = self.rect.center + PLAYER_TOOL_OFFSET[self.status.split('_')[0]]
         # 举个栗子,现在是一个播放器，玩家在正中间，我们希望使用工具，假如玩家向左看，那么我希望玩家的工具使用是在左边一个身位并向下一点点的位置,也就是玩家的斜下方      更新它  别忘了!!!!!
 
-    def use_seed(self) :
-        pass
-
+    def use_seed(self) : # 种子
+        # pass
+        self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
+        
     def import_assets(self) : # 获取贴图
         self.animations = {'up': [],'down': [],'left': [],'right': [],
 						   'right_idle':[],'left_idle':[],'up_idle':[],'down_idle':[],
@@ -197,7 +198,7 @@ class Player(pygame.sprite.Sprite) :
         for timer in self.timers.values() :
             timer.update()
 
-    def collision(self,direction) : # collide
+    def collision(self,direction) : # collide 碰撞
         for sprite in self.collision_sprites.sprites() :
             if hasattr(sprite,'hitbox') : # hasattr() 函数用于判断对象是否包含对应的属性
                 if sprite.hitbox.colliderect(self.hitbox) :

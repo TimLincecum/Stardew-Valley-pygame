@@ -38,7 +38,7 @@ APPLE_POS = {
 }
 
 GROW_SPEED = {
-    'cron' : 1,
+    'corn' : 1,
     'tomato' : 0.7
 }
 
