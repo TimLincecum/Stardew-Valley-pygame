@@ -67,7 +67,6 @@ class SoilLayer :
         self.water_sprites = pygame.sprite.Group()
         self.plant_sprites = pygame.sprite.Group()
 
-
         # graphics
         self.soil_surf = pygame.image.load('../graphics/soil/o.png')
         self.water_surf = pygame.image.load('../graphics/soil_water/0.png')

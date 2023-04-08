@@ -2,7 +2,7 @@ import pygame
 from settings import *
 from player import Player
 from overlay import Overlay
-from sprites import Generic,Water,WilldFlower,Tree,Interaction
+from sprites import Generic,Water,WilldFlower,Tree,Interaction,Particle
 from pytmx.util_pygame import load_pygame
 from support import *
 from transition import Transition
@@ -125,12 +125,23 @@ class Level :
                 apple.kill()
             tree.create_fruit()
 
+    def plant_collision(self) :
+        if self.soil_layer.plant_sprites :
+            for plant in self.soil_layer.plant_sprites.sprites() :
+                if plant.harvestable and plant.rect.colliderect(self.player.hitbox) :
+                    self.player_add(plant.plant_type)
+                    plant.kill()
+                    Particle(plant.rect.topleft,plant.image,self.all_sprites,z = LAYERS['main']) # 粒子特效 pos, surf, groups, z
+                    self.soil_layer.grid[plant.rect.centery // TILE_SIZE][plant.rect.centerx // TILE_SIZE].remove('P') # 删除原来的作物，以便播种下一次的作物
+    # 这段代码实现了游戏中玩家与植物之间的碰撞检测和作物收获的逻辑。在 `plant_collision` 方法中，首先通过访问 `self.soil_layer.plant_sprites` 属性来获取所有的植物精灵组（Sprite Group）。然后，遍历这个精灵组中的每一个植物，如果该植物是可收获状态，且其矩形区域（hitbox）与玩家角色的矩形区域发生碰撞，则消除该植物对应的精灵，并释放资源（kill() 方法）。该方法通常会被包含在游戏主循环中，并以一定的频率进行调用，以保持游戏的正常运行。
+
     def run(self,dt) :
         # print("开始摆烂")
         self.display_surface.fill('red') #
         # self.all_sprites.draw(self.display_surface)
         self.all_sprites.custom_draw(self.player)
         self.all_sprites.update(dt)
+        self.plant_collision() # 碰撞后收集
 
         self.overlay.display()  ##注意缩进，缩进玩不明白写棒槌py
         # print(self.player.item_inventory)
@@ -142,6 +153,7 @@ class Level :
         # transition overlay
         if self.player.sleep :
             self.transition.play()
+        # print(self.player.item_inventory) 测试收获
 
 class CameraGroup(pygame.sprite.Group) :
     def __init__(self) :
