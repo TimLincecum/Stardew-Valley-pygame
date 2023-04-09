@@ -14,7 +14,7 @@ class Sky :
     def display(self,dt) :
         for index,value in enumerate(self.end_color) :
             if self.start_color[index] > value :
-                self.start_color[index] -= 5 * dt
+                self.start_color[index] -= 2 * dt # 天黑的速度
             
         self.full_surf.fill(self.start_color)
         self.display_surface.blit(self.full_surf, (0,0), special_flags = pygame.BLEND_RGBA_MULT)

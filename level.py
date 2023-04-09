@@ -9,6 +9,7 @@ from transition import Transition
 from soil import SoilLayer
 from sky import Rain,Sky
 from random import randint
+from menu import Menu
 
 class Level :
     def __init__(self) :
@@ -34,6 +35,10 @@ class Level :
         self.raining = randint(0,10) >3
         self.soil_layer.raining = self.raining
         self.sky = Sky()
+
+        # shop
+        self.menu = Menu(player = self.player, toggle_menu = self.toggle_shop)
+        self.shop_active = False
 
     def setup(self) :
 
@@ -85,7 +90,8 @@ class Level :
                     collision_sprites = self.collision_sprites,
                     tree_sprites = self.tree_sprites, # 播放器再这个通用类之前运行，人物将在地板下 开始设置
                     interaction = self.interaction_sprites,
-                    soil_layer = self.soil_layer
+                    soil_layer = self.soil_layer,
+                    toggle_shop = self.toggle_shop
                     )    
                 
             if obj.name == 'Bed' :
@@ -94,7 +100,13 @@ class Level :
                             groups = self.interaction_sprites,
                             name = 'Bed' # obj.name
                             )
-            
+            if obj.name == 'Trader' :
+                Interaction(pos = (obj.x,obj.y),
+                            size = (obj.width,obj.height),
+                            groups = self.interaction_sprites,
+                            name = 'Trader' # obj.name
+                            )
+                
         Generic(
             pos = (0,0),
             surf = pygame.image.load('../graphics/world/ground.png').convert_alpha(),
@@ -105,6 +117,10 @@ class Level :
     def player_add(self,item) :
 
         self.player.item_inventory[item] += 1
+
+    def toggle_shop(self) :
+
+        self.shop_active = not self.shop_active
 
     def reset(self) : # 重置 需要一个过渡
 
@@ -141,17 +157,25 @@ class Level :
 
     def run(self,dt) :
         # print("开始摆烂")
-        self.display_surface.fill('red') #
-        # self.all_sprites.draw(self.display_surface)
-        self.all_sprites.custom_draw(self.player)
-        self.all_sprites.update(dt)
-        self.plant_collision() # 碰撞后收集
 
+        # drawing logic
+        self.display_surface.fill('red') #
+        self.all_sprites.custom_draw(self.player)
+        # self.all_sprites.draw(self.display_surface)
+
+        # updates
+        if self.shop_active :
+            self.menu.update()
+        else :
+            self.all_sprites.update(dt)
+            self.plant_collision() # 碰撞后收集
+
+        # weather
         self.overlay.display()  ##注意缩进，缩进玩不明白写棒槌py
         # print(self.player.item_inventory)
 
         # rain
-        if self.raining :
+        if self.raining and not self.shop_active:
             self.rain.update() # 调用更新 然后更新耕地的瓦片
 
         # daytime
@@ -161,6 +185,7 @@ class Level :
         if self.player.sleep :
             self.transition.play()
         # print(self.player.item_inventory) 测试收获
+        # print(self.shop_active) 
 
 class CameraGroup(pygame.sprite.Group) :
     def __init__(self) :

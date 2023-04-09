@@ -4,7 +4,7 @@ from support import *
 from timer import Timer
 
 class Player(pygame.sprite.Sprite) :
-    def __init__(self,pos,group,collision_sprites,tree_sprites,interaction,soil_layer) :
+    def __init__(self,pos,group,collision_sprites,tree_sprites,interaction,soil_layer, toggle_shop) :
         super().__init__(group)
 
         self.import_assets()
@@ -38,6 +38,7 @@ class Player(pygame.sprite.Sprite) :
             'seed switch' : Timer(200)
         }
 
+
         # tools
         self.tools = ['axe','water','hoe']
         self.tool_index = 0
@@ -56,12 +57,18 @@ class Player(pygame.sprite.Sprite) :
             'corn' : 0,
             'tomato' : 0
         }
+        self.seed_inventory = { 
+        'corn' : 5,
+        'tomato' : 5
+        }
+        self.money = 200
 
         # interaction
         self.tree_sprites = tree_sprites
         self.interaction = interaction
         self.sleep = False
         self.soil_layer = soil_layer
+        self.toggle_shop = toggle_shop
 
     def use_tool(self) :
         # pass
@@ -87,7 +94,10 @@ class Player(pygame.sprite.Sprite) :
 
     def use_seed(self) : # 种子
         # pass
-        self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
+
+        if self.seed_inventory[self.selected_seed] > 0 :
+            self.soil_layer.plant_seed(self.target_pos, self.selected_seed)
+            self.seed_inventory[self.selected_seed] -= 1
         
     def import_assets(self) : # 获取贴图
         self.animations = {'up': [],'down': [],'left': [],'right': [],
@@ -173,10 +183,12 @@ class Player(pygame.sprite.Sprite) :
                 # print(self.selected_seed)
 
             if keys[pygame.K_RETURN] :
+                self.toggle_shop()
                 collided_interaction_sprites = pygame.sprite.spritecollide(self,self.interaction,False) # sprite, group, dokill
                 if collided_interaction_sprites :
                     if collided_interaction_sprites[0].name == 'Trader' : # name是在sprites中定义的
-                        pass
+                        # pass
+                        self.toggle_shop()
                     else :
                         self.status = 'left_idle'
                         self.sleep = True
