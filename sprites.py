@@ -45,7 +45,7 @@ class WilldFlower(Generic) :
         self.hitbox = self.rect.copy().inflate(-20,-self.rect.height * 0.9)
 
 class Particle(Generic) : # 粒子特效
-    def __init__(self, pos, surf, groups, z, duration = 200):
+    def __init__(self, pos, surf, groups, z, duration = 200) :
         super().__init__(pos, surf, groups, z)
         self.start_time = pygame.time.get_ticks()
         self.duration = duration
@@ -80,9 +80,15 @@ class Tree(Generic) :
 
         self.player_add = player_add
 
+        # sounds
+        self.axe_sound = pygame.mixer.Sound('../audio/嗨害嗨.wav') # 记得调用更新 play sound
+
     def damage(self) : 
         # damaging the tree
         self.health -= 1
+
+        # play sound
+        self.axe_sound.play()
 
         # remove an apple 摧毁苹果树
         if len(self.apple_sprites.sprites()) > 0 :

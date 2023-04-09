@@ -1,4 +1,5 @@
 from pygame.math import Vector2
+
 # screen
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
@@ -45,10 +46,10 @@ GROW_SPEED = {
 SALE_PRICES ={
     'wood' : 4,
     'apple' : 2,
-    'cron' : 10,
+    'corn' : 10,
     'tomato' : 20
 }
 PURCHASE_PRICES = {
-    'cron' : 4,
+    'corn' : 4,
     'tomato' : 5
 }
