@@ -32,13 +32,21 @@ class Level :
         # sky
         self.rain = Rain(self.all_sprites)
         # self.raining = False rain的开关
-        self.raining = randint(0,10) >3
+        self.raining = randint(0,10) > 3
         self.soil_layer.raining = self.raining
         self.sky = Sky()
 
         # shop
         self.menu = Menu(player = self.player, toggle_menu = self.toggle_shop)
         self.shop_active = False
+
+        # music
+        self.success = pygame.mixer.Sound('../audio/success.wav')
+        self.success.set_volume(0.3)
+
+        # 背景音乐
+        self.music = pygame.mixer.Sound('../audio/嗨害嗨.wav')
+        self.music.play(loops = -1)
 
     def setup(self) :
 
@@ -117,6 +125,7 @@ class Level :
     def player_add(self,item) :
 
         self.player.item_inventory[item] += 1
+        self.success.play()
 
     def toggle_shop(self) :
 
@@ -131,7 +140,7 @@ class Level :
         self.soil_layer.remove_water()
 
         # randomize the rain
-        self.raining = randint(0,10) >3
+        self.raining = randint(0,10) > 3
         self.soil_layer.raining = self.raining
         if self.raining :
             self.soil_layer.water_all()

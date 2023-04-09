@@ -70,6 +70,10 @@ class Player(pygame.sprite.Sprite) :
         self.soil_layer = soil_layer
         self.toggle_shop = toggle_shop
 
+        # sound
+        self.watering = pygame.mixer.Sound('../audio/嗨害嗨.wav')
+        self.watering.set_volume(0.3)
+
     def use_tool(self) :
         # pass
         # print(self.selected_tool)
@@ -86,6 +90,7 @@ class Player(pygame.sprite.Sprite) :
 
         if self.selected_tool == 'water' :
             self.soil_layer.water(self.target_pos)
+            self.watering.play()
 
     def get_target_pos(self) :
 
@@ -183,7 +188,7 @@ class Player(pygame.sprite.Sprite) :
                 # print(self.selected_seed)
 
             if keys[pygame.K_RETURN] :
-                self.toggle_shop()
+                # self.toggle_shop()
                 collided_interaction_sprites = pygame.sprite.spritecollide(self,self.interaction,False) # sprite, group, dokill
                 if collided_interaction_sprites :
                     if collided_interaction_sprites[0].name == 'Trader' : # name是在sprites中定义的
