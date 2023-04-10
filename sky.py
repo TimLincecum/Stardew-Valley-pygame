@@ -6,16 +6,18 @@ from random import randint,choice
 
 class Sky :
     def __init__(self) :
+        # 设置显示表面、全黑表面、起始颜色和结束颜色属性
         self.display_surface = pygame.display.get_surface()
         self.full_surf = pygame.Surface((SCREEN_WIDTH,SCREEN_HEIGHT)) # 一个全黑的在屏幕顶部
         self.start_color = [255,255,255]
         self.end_color = (38,101,189)
 
     def display(self,dt) :
+        # 根据时间差值调整起始颜色
         for index,value in enumerate(self.end_color) :
             if self.start_color[index] > value :
                 self.start_color[index] -= 2 * dt # 天黑的速度
-            
+        # 填充全黑表面，并使用 BLEND_RGBA_MULT 标志将其覆盖到显示表面上
         self.full_surf.fill(self.start_color)
         self.display_surface.blit(self.full_surf, (0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
@@ -46,13 +48,14 @@ class Drop(Generic) :
 
 class Rain :
     def __init__(self, all_sprites) :
+        # 设置所有精灵组和雨滴、地面细节元素存储路径
         self.all_sprites = all_sprites
         self.rain_drops = import_folder('../graphics/rain/drops/')
         self.rain_floor = import_folder('../graphics/rain/floor/')
         self.floor_w,self.floor_h =  pygame.image.load('../graphics/world/ground.png').get_size() # 获取整张地图大小 下雨雨滴的地图覆盖
 
     def create_floor(self) :
-        Drop(
+        Drop( # 创建地面细节元素对象
             pos = (randint(0,self.floor_w),randint(0,self.floor_h)), # (0 -> w of the map  is  X ,)
             moving = False,
             surf = choice(self.rain_floor),
@@ -61,7 +64,7 @@ class Rain :
             )
 
     def create_drops(self) :
-        Drop(pos = (randint(0,self.floor_w),randint(0,self.floor_h)), # (0 -> w of the map  is  X ,)
+        Drop(pos = (randint(0,self.floor_w),randint(0,self.floor_h)), # 创建雨滴对象 (0 -> w of the map  is  X ,)
             moving = True,
             surf = choice(self.rain_drops),
             groups = self.all_sprites,
@@ -69,6 +72,6 @@ class Rain :
             )
 
 
-    def update(self) : # 创建更新
+    def update(self) : # 创建更新 更新雨滴和地面细节元素
         self.create_drops()
         self.create_floor()

@@ -17,13 +17,13 @@ class Overlay :
         # print(self.seeds_surf) 输出包含所有种子 Surface 对象的字典
 
     def display(self) :  #注意缩进，缩进玩不明白写棒槌py
-        # 显示道具和种子覆盖层
+        # 显示道具和种子覆盖层 显示选中的道具和种子图标
         # tool
         tool_surf = self.tools_surf[self.player.selected_tool] # 获取选中道具对应的 Surface 对象
         tool_rect = tool_surf.get_rect(midbottom = OVERLAY_POSITIONS['tool']) # 根据指定位置计算道具的矩形范围
         self.display_surface.blit(tool_surf,tool_rect)   #(0,0) 左上 在当前显示窗口表面对象上绘制道具图像
 
-        # seed
+        # seed 种子
         seed_surf = self.seeds_surf[self.player.selected_seed] # 获取选中种子对应的 Surface 对象
         seed_rect = seed_surf.get_rect(midbottom = OVERLAY_POSITIONS['seed']) # 根据指定位置计算种子的矩形范围
         self.display_surface.blit(seed_surf,seed_rect) # 在当前显示窗口表面对象上绘制种子图像
