@@ -3,6 +3,15 @@ from settings import *
 from random import randint,choice
 from timer import Timer
 
+# pygame.sprite.Sprite 是一个 Pygame 内置的精灵类，是所有精灵类的基类。它提供了一些基础的属性和方法，使得继承它的子类可以更加简单地实现其他高级功能。
+# image：表示精灵图像的表面。
+# rect：表示精灵位置和大小的矩形。
+# mask：表示精灵的碰撞区域的掩码，用于进行像素级别的碰撞检测。
+# groups：表示精灵所在的精灵组。
+# add()：将精灵添加到指定的精灵组中。
+# remove()：将精灵从指定的精灵组中移除。
+# kill()：从所有精灵组中移除该精灵，并清空其引用（以便垃圾回收）。
+
 class Generic(pygame.sprite.Sprite) :
     def __init__(self,pos,surf,groups,z = LAYERS['main']) :
         super().__init__(groups)

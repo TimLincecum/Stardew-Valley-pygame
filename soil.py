@@ -20,6 +20,10 @@ class WaterTile(pygame.sprite.Sprite) :
 
 class Plant(pygame.sprite.Sprite) : # 种植
     def __init__(self, plant_type, groups, soil, check_watered) :
+    # plant_type 是植物的类型，用于查找正确的图像帧。
+    # groups 是此植物所属的精灵组。
+    # soil 是此植物种植在哪块土地上。
+    # check_watered 是一个回调函数，用于检查该植物附近的水砖块是否被浇水过
         super().__init__(groups)
 
         # setup
@@ -29,7 +33,7 @@ class Plant(pygame.sprite.Sprite) : # 种植
         self.check_watered = check_watered
         
         # plant growing
-        self.age = 0
+        self.age = 0 # 成熟度
         self.max_age = len(self.frames) - 1
         self.grow_speed = GROW_SPEED[plant_type]
 
@@ -174,7 +178,7 @@ class SoilLayer :
         is_watered = 'W' in cell
         return is_watered
 
-    def plant_seed(self, target_pos, seed) :
+    def plant_seed(self, target_pos, seed) : # 播种
         for soil_sprite in self.soil_sprites.sprites() :
             if soil_sprite.rect.collidepoint(target_pos) :
                 self.plant_sound.play()
