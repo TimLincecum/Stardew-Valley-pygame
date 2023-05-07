@@ -235,6 +235,26 @@ class Player(pygame.sprite.Sprite) :
                         self.rect.centery = self.hitbox.centery
                         self.pos.y = self.hitbox.centery
                         # 下方的collision不能忘记写
+    # def collision(self,direction) : 
+    # # 遍历所有需要进行碰撞检测的sprite列表
+    # for sprite in self.collision_sprites.sprites() :
+    #     if hasattr(sprite,'hitbox') :  # 如果该sprite具有hitbox属性
+    #         if sprite.hitbox.colliderect(self.hitbox) : # 判断两个矩形是否相交
+    #             if direction == 'horizontal' : # 左右碰撞
+    #                 if self.direction.x > 0 : # 向右移动
+    #                     self.hitbox.right = sprite.hitbox.left # 修改自身hitbox右侧位置
+    #                 if self.direction.x < 0 : # 向左移动
+    #                     self.hitbox.left = sprite.hitbox.right # 修改自身hitbox左侧位置
+    #                 self.rect.centerx = self.hitbox.centerx # 修改sprite图像中心点位置
+    #                 self.pos.x = self.hitbox.centerx # 修改sprite实际位置
+    
+    #             if  direction == 'vertical' : # 上下碰撞
+    #                 if self.direction.y > 0 : # 向上移动
+    #                     self.hitbox.bottom = sprite.hitbox.top # 修改自身hitbox底部位置
+    #                 if self.direction.y < 0 : # 向下移动
+    #                     self.hitbox.top = sprite.hitbox.bottom # 修改自身hitbox顶部位置
+    #                 self.rect.centery = self.hitbox.centery # 修改sprite图像中心点位置
+    #                 self.pos.y = self.hitbox.centery # 修改sprite实际位置
 
     def move(self,dt) :
         # horizontal movement 归一化向量 

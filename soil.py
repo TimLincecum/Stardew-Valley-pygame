@@ -144,7 +144,7 @@ class SoilLayer :
                 # surf = choice(self.water_surf)
                 surf = self.water_surf
                 # 2.create a water sprite 创造浇过水的耕地
-                WaterTile(pos, surf, groups = [self.all_sprites,self.soil_sprites])
+                WaterTile(pos, surf, groups = [self.all_sprites,self.water_sprites])
                 # 1.copy the position from the soil sprite
                 # 2.for the surface -> import the folder '../graphics/soil_water'
                 # 3.random select one surface

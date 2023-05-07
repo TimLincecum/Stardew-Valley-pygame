@@ -45,8 +45,8 @@ class Level :
         self.success.set_volume(0.3)
 
         # 背景音乐
-        self.music = pygame.mixer.Sound('../audio/嗨害嗨.wav')
-        self.music.play(loops = -1)
+        # self.music = pygame.mixer.Sound('../audio/嗨害嗨.wav')
+        # self.music.play(loops = -1)
 
     def setup(self) :
 
@@ -136,15 +136,14 @@ class Level :
         # plants 重置游戏场景
         self.soil_layer.update_plants()
 
-        # soil
         self.soil_layer.remove_water()
-
+            
         # randomize the rain
         self.raining = randint(0,10) > 3
         self.soil_layer.raining = self.raining
         if self.raining :
             self.soil_layer.water_all()
-
+            
         # apples on the trees
         for tree in self.tree_sprites.sprites() :
             for apple in tree.apple_sprites.sprites() :
